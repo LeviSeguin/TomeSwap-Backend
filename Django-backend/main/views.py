@@ -6,5 +6,6 @@ def home(request):
     return HttpResponse("Hello World")
 
 def test_api(request):
-    return "this is the test api content"
+    data = {"content": "this is the test api content"}
+    return JsonResponse(data)
 
