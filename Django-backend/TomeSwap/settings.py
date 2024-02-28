@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'image_upload',
     'corsheaders',
+    'Recommendation_algorithm',
 ]
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
