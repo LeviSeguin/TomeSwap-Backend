@@ -52,20 +52,24 @@ def extract_book_details(response):
             categories = ', '.join(book_info.get('categories', ['N/A']))
             maturityRating = book_info.get('maturityRat`ing', 'N/A')
             description = book_info.get('description', 'N/A')
+            thumbnail = book_info.get('imageLinks', {}).get('thumbnail', 'N/A')
+            book_details = {
+                'title': title,
+                'authors': authors,
+                'categories': categories,
+                'maturityRating': maturityRating,
+                'description': description,
+                'thumbnail': thumbnail  # Include the thumbnail link
+            }
             
-            print(f"\nBook Details:")
-            print(f"Title: {title}")
-            print(f"Author: {authors}")
-            print(f"Category: {categories}")
-            print(f"Mature Rating: {maturityRating}")
-            print(f"Description: {description}")
-
-            
+            return book_details  # Return the book details dictionary
         else:
             return None
     else:
         print(f"\nFailed to retrieve book details. Status Code: {response.status_code}")
         return None
+
+
 
 
 def upload_image(request):
@@ -91,8 +95,11 @@ def upload_image(request):
         book_details = extract_book_details(book)
 
         
-        # Return JSON response with OCR results
-        return JsonResponse({'message': 'Image uploaded and OCR processed successfully.', 'filename': filename})
+        return JsonResponse({
+            'message': 'Image uploaded and OCR processed successfully.', 
+            'filename': filename,
+            'text_data': text_data,
+            'book_details': book_details  # Include book details in the response
+        })
     else:
         return JsonResponse({'error': 'No image found in the request.'}, status=400)
-
