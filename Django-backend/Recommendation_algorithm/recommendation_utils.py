@@ -1,4 +1,4 @@
-# recommendation_utils.py
+# recommendation_algorithm_utils.py
 from Recommendation_algorithm.models import Book
 
 def get_recommendations(book):
