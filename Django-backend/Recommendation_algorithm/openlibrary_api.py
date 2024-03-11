@@ -1,6 +1,5 @@
-# openlibrary_api.py (in your Django app)
-
 import requests
+from django.http import JsonResponse
 
 class OpenLibraryAPI:
     base_url = 'https://openlibrary.org'
@@ -14,4 +13,32 @@ class OpenLibraryAPI:
         else:
             return None
 
-    # Add other API methods as needed (e.g., search_authors, get_book_details, etc.)
+    @classmethod
+    def search_authors(cls, query):
+        url = f'{cls.base_url}/authors/{query}.json'
+        response = requests.get(url)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            return None
+
+class archive_org_api:
+    def get_fulltext_content(self, document_id):
+        # Implementation to retrieve full-text content from archive.org
+        pass
+
+def get_fulltext_content(request):
+    document_id = request.GET.get('document_id')
+    if document_id:
+        # Make API request to retrieve full-text content
+        fulltext_api = archive_org_api()
+        fulltext_content = fulltext_api.get_fulltext_content(document_id)
+        return JsonResponse(fulltext_content)
+    else:
+        return JsonResponse({'error': 'No document_id parameter provided'}, status=400)
+    
+    # API wrapper function
+def fetch_data_from_api(endpoint):
+    # Make an HTTP request to the specified API endpoint and return the response data
+    response = requests.get(endpoint)
+    return response.json()

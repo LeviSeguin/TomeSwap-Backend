@@ -1,5 +1,6 @@
-from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework import status, permissions
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import BookInteraction
 from django.http import JsonResponse
@@ -18,7 +19,6 @@ def search_books(request):
         return JsonResponse(books_data)
     else:
         return JsonResponse({'error': 'No query parameter provided'}, status=400)
-
 
 # Sample user-item interaction data (user ratings for books)
 user_item_matrix = np.array([[4, 0, 5, 0, 1],
@@ -45,54 +45,57 @@ def _generate_recommendations_from_model(user_ids):
 # Deploy collaborative filtering model as API endpoint
 model = train_collaborative_filtering_model()
 
-@api_view(['POST'])
-def view_book(request):
-    user = request.user
-    book_id = request.data.get('book_id')
-    if book_id:
-        interaction = BookInteraction.objects.create(user=user, book_id=book_id, interaction_type='view')
-        return Response({'message': 'Book viewed successfully'}, status=status.HTTP_200_OK)
-    else:
-        return Response({'error': 'Missing book_id'}, status=status.HTTP_400_BAD_REQUEST)
+class ViewBookView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
 
-@api_view(['POST'])
-def add_to_library(request):
-    user = request.user
-    book_id = request.data.get('book_id')
-    if book_id:
-        interaction = BookInteraction.objects.create(user=user, book_id=book_id, interaction_type='add')
-        return Response({'message': 'Book added to library successfully'}, status=status.HTTP_200_OK)
-    else:
-        return Response({'error': 'Missing book_id'}, status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request, format=None):
+        user = request.user
+        book_id = request.data.get('book_id')
+        if book_id:
+            interaction = BookInteraction.objects.create(user=user, book_id=book_id, interaction_type='view')
+            return Response({'message': 'Book viewed successfully'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'Missing book_id'}, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['POST'])
-def rate_book(request):
-    user = request.user
-    book_id = request.data.get('book_id')
-    rating = request.data.get('rating')
-    if book_id and rating:
-        interaction = BookInteraction.objects.create(user=user, book_id=book_id, interaction_type='rating', rating=rating)
-        return Response({'message': 'Book rated successfully'}, status=status.HTTP_200_OK)
-    else:
-        return Response({'error': 'Missing book_id or rating'}, status=status.HTTP_400_BAD_REQUEST)
+class AddToLibraryView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
 
-@api_view(['POST'])
-def generate_recommendations(request):
-    user_ids = request.data.get('user_ids')
-    if user_ids:
-        recommendations = _generate_recommendations_from_model(user_ids)
-        return JsonResponse({'recommendations': [rec.tolist() for rec in recommendations]})
-    else:
-        return Response({'error': 'Missing user_ids'}, status=status.HTTP_400_BAD_REQUEST)
-    
-    
-@api_view(['POST'])
-def extract_text_from_image(request):
-    # Sample view function for extracting text from an image using Tesseract OCR
+    def post(self, request, format=None):
+        user = request.user
+        book_id = request.data.get('book_id')
+        if book_id:
+            interaction = BookInteraction.objects.create(user=user, book_id=book_id, interaction_type='add')
+            return Response({'message': 'Book added to library successfully'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'Missing book_id'}, status=status.HTTP_400_BAD_REQUEST)
 
-    # Get image file from request
-    image_file = request.FILES.get('image')
+class RateBookView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
 
-    # Open image using PIL (Python Imaging Library)
-    image = Image.open(image_file)
-    
+    def post(self, request, format=None):
+        user = request.user
+        book_id = request.data.get('book_id')
+        rating = request.data.get('rating')
+        if book_id and rating:
+            interaction = BookInteraction.objects.create(user=user, book_id=book_id, interaction_type='rating', rating=rating)
+            return Response({'message': 'Book rated successfully'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'Missing book_id or rating'}, status=status.HTTP_400_BAD_REQUEST)
+
+class GenerateRecommendations(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, format=None):
+        user_ids = request.data.get('user_ids')
+        if user_ids:
+            recommendations = _generate_recommendations_from_model(user_ids)
+            return Response(recommendations)
+        else:
+            return Response({'error': 'Missing user_ids'}, status=status.HTTP_400_BAD_REQUEST)
+class ExtractTextFromImage(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, format=None):
+        image = request.FILES['image']
+        text = pytesseract.image_to_string(Image.open(image))
+        return Response({'text': text})
