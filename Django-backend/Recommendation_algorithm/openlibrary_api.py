@@ -14,6 +14,15 @@ class OpenLibraryAPI:
             return None
 
     @classmethod
+    def get_book_details(cls, book_id):
+        url = f'{cls.base_url}/works/{book_id}.json'
+        response = requests.get(url)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            return None
+
+    @classmethod
     def search_authors(cls, query):
         url = f'{cls.base_url}/authors/{query}.json'
         response = requests.get(url)
@@ -42,3 +51,4 @@ def fetch_data_from_api(endpoint):
     # Make an HTTP request to the specified API endpoint and return the response data
     response = requests.get(endpoint)
     return response.json()
+

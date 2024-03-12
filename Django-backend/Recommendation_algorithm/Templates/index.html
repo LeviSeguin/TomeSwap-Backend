@@ -1,4 +1,3 @@
-<!-- Recommendations_algorithm/templates/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,14 +6,10 @@
     <title>Book Details</title>
 </head>
 <body>
-    <h1>Book Details</h1>
-    {% if book %}
-        <p>Title: {{ book.title }}</p>
-        <p>Author: {{ book.author }}</p>
-        <p>Genre: {{ book.genre }}</p>
-        <p>Publication Year: {{ book.publication_year }}</p>
-    {% else %}
-        <p>No book data available.</p>
-    {% endif %}
+
+<button id="fetchDetails">Fetch Book Details</button>
+<div id="bookDetails"></div>
+
+<script src="{% static 'js/main.js' %}"></script>
 </body>
 </html>

@@ -12,6 +12,8 @@ from sklearn.neighbors import NearestNeighbors
 import numpy as np
 from .openlibrary_api import OpenLibraryAPI
 
+
+
 def search_books(request):
     query = request.GET.get('q', '')
     if query:
@@ -19,6 +21,13 @@ def search_books(request):
         return JsonResponse(books_data)
     else:
         return JsonResponse({'error': 'No query parameter provided'}, status=400)
+
+def book_details(request, book_id):
+    book_data = OpenLibraryAPI.get_book_details(book_id)
+    if book_data:
+        return JsonResponse(book_data)
+    else:
+        return JsonResponse({'error': 'Book details not found'}, status=404)
 
 # Sample user-item interaction data (user ratings for books)
 user_item_matrix = np.array([[4, 0, 5, 0, 1],
@@ -45,7 +54,7 @@ def _generate_recommendations_from_model(user_ids):
 # Deploy collaborative filtering model as API endpoint
 model = train_collaborative_filtering_model()
 
-class ViewBookView(APIView):
+class view_book(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, format=None):
@@ -57,7 +66,7 @@ class ViewBookView(APIView):
         else:
             return Response({'error': 'Missing book_id'}, status=status.HTTP_400_BAD_REQUEST)
 
-class AddToLibraryView(APIView):
+class add_to_library(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, format=None):
@@ -69,7 +78,7 @@ class AddToLibraryView(APIView):
         else:
             return Response({'error': 'Missing book_id'}, status=status.HTTP_400_BAD_REQUEST)
 
-class RateBookView(APIView):
+class rate_book(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, format=None):
