@@ -4,8 +4,8 @@ import time
 import requests
 from django.http import JsonResponse
 from django.conf import settings
+from .models import listing
 import os
-
 def perform_ocr(image_path):
     # Start OCR timer
     start_ocr_time = time.time()
@@ -104,21 +104,34 @@ def upload_image(request):
     else:
         return JsonResponse({'error': 'No image found in the request.'}, status=400)
 
+from django.http import JsonResponse
+import json
+
 def save_book(request):
     if request.method == 'POST':
-        # Extract data from request
-        data = request.POST  
-        title = data.get('title')
-        authors = data.get('authors')
-        categories = data.get('categories')
+        data = request.body
+        try:
+            # Parse JSON data
+            data = json.loads(data)
+            title = data.get('title')
+            authors = data.get('authors')
+            categories = data.get('categories')
+            print (title,authors,categories)
+            # Check for missing data and handle appropriately
+            if not title or not authors or not categories:
+                return JsonResponse({'error': 'Missing required fields. Please provide title, authors, and categories.'}, status=400)
 
-        # Create a new book entry
-        book = Book.objects.create(
-            title=title,
-            authors=authors,
-            categories=categories,
-        )
+            # Create a new book entry (only if all fields are present)
+            book = listing.objects.create(
+                title=title,
+                authors=authors,
+                categories=categories,
+            )
 
-        return JsonResponse({'message': 'Book entry created successfully.'})
+            return JsonResponse({'message': 'Book entry created successfully.'})
+
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid request format.'}, status=400)
+
     else:
         return JsonResponse({'error': 'Invalid request method.'}, status=405)
