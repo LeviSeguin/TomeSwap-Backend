@@ -103,3 +103,22 @@ def upload_image(request):
         })
     else:
         return JsonResponse({'error': 'No image found in the request.'}, status=400)
+
+def save_book(request):
+    if request.method == 'POST':
+        # Extract data from request
+        data = request.POST  
+        title = data.get('title')
+        authors = data.get('authors')
+        categories = data.get('categories')
+
+        # Create a new book entry
+        book = Book.objects.create(
+            title=title,
+            authors=authors,
+            categories=categories,
+        )
+
+        return JsonResponse({'message': 'Book entry created successfully.'})
+    else:
+        return JsonResponse({'error': 'Invalid request method.'}, status=405)
