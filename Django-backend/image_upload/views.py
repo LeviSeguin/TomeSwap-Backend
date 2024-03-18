@@ -116,7 +116,7 @@ def save_book(request):
             title = data.get('title')
             authors = data.get('authors')
             categories = data.get('categories')
-            print (title,authors,categories)
+            thumbnail = data.get('thumbnail')
             # Check for missing data and handle appropriately
             if not title or not authors or not categories:
                 return JsonResponse({'error': 'Missing required fields. Please provide title, authors, and categories.'}, status=400)
@@ -126,6 +126,7 @@ def save_book(request):
                 title=title,
                 authors=authors,
                 categories=categories,
+                thumbnail=thumbnail,
             )
 
             return JsonResponse({'message': 'Book entry created successfully.'})
