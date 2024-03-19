@@ -11,7 +11,34 @@ from PIL import Image
 from sklearn.neighbors import NearestNeighbors
 import numpy as np
 from .openlibrary_api import OpenLibraryAPI
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder, MinMaxScaler
+from sklearn.feature_extraction.text import TfidfVectorizer
+from scipy.sparse import csr_matrix
+import json
+import pandas as pd  # Add this line to import pandas
 
+def process_book(self, book_data):
+    # Check ISBN to avoid duplicates
+    if not Book.objects.filter(isbn=book_data.get('isbn')).exists():
+        # Extract relevant data
+        title = book_data.get('title', '')
+        authors = ', '.join(book_data.get('authors', []))  # Handle multiple authors
+        isbn = book_data.get('isbn', '')
+        genres = ', '.join(book_data.get('genres', []))  
+        publication_year = book_data.get('publish_date', '') 
+
+        # Create the Book object
+        Book.objects.create(
+            title=title,
+            author=authors,
+            isbn=isbn,
+            genre=genres,
+            publication_year=publication_year
+        )
+        self.stdout.write(self.style.SUCCESS(f'Book added: {title}'))
+    else:
+        self.stdout.write(self.style.NOTICE(f'Book with ISBN {isbn} already exists'))
 
 
 def search_books(request):
@@ -108,3 +135,6 @@ class ExtractTextFromImage(APIView):
         image = request.FILES['image']
         text = pytesseract.image_to_string(Image.open(image))
         return Response({'text': text})
+    
+    
+    
