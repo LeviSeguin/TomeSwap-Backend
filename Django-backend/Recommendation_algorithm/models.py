@@ -15,3 +15,5 @@ class Book(models.Model):
     genre = models.CharField(max_length=50)
     publication_year = models.IntegerField()
     # Add other metadata attributes as needed
+
+# Create your models here.

@@ -1,8 +1,9 @@
+# Recommendation_algorithm/view.py
 from rest_framework import status, permissions
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import BookInteraction
+from .models import Book, BookInteraction
 from django.http import JsonResponse
 import torch
 import syft as sy

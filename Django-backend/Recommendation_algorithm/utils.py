@@ -1,3 +1,4 @@
+# Recommendation_algorithm/utils.py
 import requests
 from bs4 import BeautifulSoup
 from sklearn.preprocessing import MinMaxScaler
