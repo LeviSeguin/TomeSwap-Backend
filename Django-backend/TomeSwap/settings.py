@@ -41,7 +41,11 @@ INSTALLED_APPS = [
     'image_upload',
     'corsheaders',
     'appName',
+    'accounts',
 ]
+
+# For user accounts
+AUTH_USER_MODEL = 'accounts.CustomUser'
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
