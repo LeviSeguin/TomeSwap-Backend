@@ -1,0 +1,6 @@
+from django.urls import path
+from .views import fetch_listing
+
+urlpatterns = [
+    path('fetch-listings/', fetch_listing, name='fetch_listing'),
+]
