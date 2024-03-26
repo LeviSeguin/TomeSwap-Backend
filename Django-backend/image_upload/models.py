@@ -9,6 +9,7 @@ class listing(models.Model):
     #username = models.ForeignKey(User, on_delete=models.CASCADE)
     listingid = models.AutoField(primary_key=True)
     thumbnail = models.CharField(max_length=255)
+    description = models.CharField(max_length=2000)
     
 class Meta:
         db_table = 'image_upload_listing'  # Specify the desired table name
