@@ -33,7 +33,7 @@ def scrape_book_metadata(book_url):
         genre = genre_element.text.strip()
 
     publication_year = None
-    publication_year_element = soup.find('div', {'class': 'uitext darkGreyText'})
+    publication_year_element = soup.find('div', {'class': 'uitext darkGreyText'})   
     if publication_year_element is not None:
         publication_year = publication_year_element.text.strip().split()[-1]
 

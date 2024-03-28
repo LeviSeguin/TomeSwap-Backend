@@ -1,32 +1,36 @@
-# Recommendation_algorithm/management/commands/scrape_openliberary.py
+# Recommendation_algorithm/management/commands/scrape_openlibrary.py
 import requests
 from bs4 import BeautifulSoup
 
-def _scrape_openlibrary(self, identifier):
-    url = f"https://openlibrary.org/isbn/{identifier}"  # Or a relevant search URL
-
+def _scrape_openlibrary(identifier):
+    url = f"https://openlibrary.org/search/{identifier}"
     response = requests.get(url)
 
     if response.status_code == 200:
         soup = BeautifulSoup(response.content, 'html.parser')
 
-        # Target specific HTML elements
-        title = self._extract_title(soup)
-        author = self._extract_author(soup)
-        # ... similar logic for other fields
+        if 'ISBN' in soup:
+            isbn = soup['ISBN'][identifier]  # Extract ISBN
+        if 'publishers' in soup:
+            publisher = soup['publishers'][0]  # Extract publisher
+
+        title = _extract_title(soup)
+        author = _extract_author(soup)
 
         return {
             'title': title,
             'author': author,
-            # ... add more fields
+            'isbn': isbn,
+            'publisher': publisher,
         }
     else:
-        return None  # Indicate failure
+        return None
 
-# Helper functions to extract data 
-def _extract_title(self, soup):
-    # Find the relevant HTML tag (e.g., <h1>) containing the title
-    # ... your BeautifulSoup logic here
+# Helper functions to extract data from HTML
+def _extract_title(soup):
+    title_element = soup.find('h1', {'class': 'title'})
+    return title_element.text.strip() if title_element else None
 
-def _extract_author(self, soup):
-    # ... similar logic for author
+def _extract_author(soup):
+    author_element = soup.find('span', {'class': 'author-name'})
+    return author_element.text.strip() if author_element else None

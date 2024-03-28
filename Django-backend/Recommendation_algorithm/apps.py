@@ -1,3 +1,4 @@
+#Recommendation_algorithm/apps.py
 from django.apps import AppConfig
 class RecommendationAlgorithmConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
