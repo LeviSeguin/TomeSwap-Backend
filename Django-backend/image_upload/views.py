@@ -6,6 +6,8 @@ from django.http import JsonResponse
 from django.conf import settings
 from .models import listing
 import os
+from django.contrib.auth.decorators import login_required
+
 def perform_ocr(image_path):
     # Start OCR timer
     start_ocr_time = time.time()
@@ -109,29 +111,33 @@ import json
 
 def save_book(request):
     if request.method == 'POST':
-        data = request.body
         try:
             # Parse JSON data
-            data = json.loads(data)
+            data = json.loads(request.body)
             title = data.get('title')
             authors = data.get('authors')
             categories = data.get('categories')
             thumbnail = data.get('thumbnail')
             description = data.get('description')
+
+            # Retrieve current user's username
+            username = request.user.username
+
             # Check for missing data and handle appropriately
             if not title or not authors or not categories:
                 return JsonResponse({'error': 'Missing required fields. Please provide title, authors, and categories.'}, status=400)
 
-            # Create a new book entry (only if all fields are present)
-            book = listing.objects.create(
+            # Create a new listing entry
+            listing.objects.create(
                 title=title,
                 authors=authors,
                 categories=categories,
                 thumbnail=thumbnail,
                 description=description,
+                username=username  # Save the username with the listing
             )
 
-            return JsonResponse({'message': 'Book entry created successfully.'})
+            return JsonResponse({'message': 'Listing created successfully.'})
 
         except json.JSONDecodeError:
             return JsonResponse({'error': 'Invalid request format.'}, status=400)
