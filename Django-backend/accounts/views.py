@@ -13,7 +13,8 @@ def register_user(request):
     if serializer.is_valid():
         user = serializer.save()
         return Response({'message': 'User created successfully'}, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    print(serializer.errors)
+    return Response(serializer.errors, status=400)
 
 # User login
 def login_view(request):
@@ -26,16 +27,16 @@ def login_view(request):
             return JsonResponse({'error': 'Invalid JSON data'}, status=400)
         
         user = authenticate(request, username=username, password=password)
-        print(username)
-        print(password)
-        print(user)
+        # print(username)
+        # print(password)
+        # print(user)
         if user is not None:
-            print(2)
+            # print(2)
             login(request, user)
             return JsonResponse({'message': 'Login successful'})
         else:
-            print(1)
-            return JsonResponse({'error': 'Invalid username or password'})
+            # print(1)
+            return JsonResponse({'error': 'Invalid username or password'}, status=400)
     else:
         return JsonResponse({'error': 'Method not allowed'}, status=405)
 
