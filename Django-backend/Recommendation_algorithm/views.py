@@ -18,6 +18,8 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from scipy.sparse import csr_matrix
 import json
 import pandas as pd  
+
+
 def process_book(self, book_data):
     # Check ISBN to avoid duplicates
     if not Book.objects.filter(isbn=book_data.get('isbn')).exists():
@@ -38,7 +40,7 @@ def process_book(self, book_data):
         )
         self.stdout.write(self.style.SUCCESS(f'Book added: {title}'))
     else:
-        self.stdout.write(self.style.NOTICE(f'Book with ISBN {isbn} already exists'))
+           self.stdout.write(self.style.NOTICE(f'Book with ISBN  already exists'))
 
 def search_books(request):
     query = request.GET.get('q', '')

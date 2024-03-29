@@ -65,8 +65,8 @@ def extract_book_details(response):
             categories = ', '.join(book_info.get('categories', ['N/A']))
             maturityRating = book_info.get('maturityRating', 'N/A')
             description = book_info.get('description', 'N/A')
-
-            return title, authors, categories, maturityRating, description
+            isbn = book_info.get('isbn','N/A')
+            return title, authors, categories, maturityRating, description , isbn
         else:
             return None
     else:
@@ -97,13 +97,14 @@ def main():
         book_details = extract_book_details(response)
 
         if book_details:
-            title, authors, categories, maturityRating, description = book_details
+            title, authors, categories, maturityRating, description, isbn = book_details
             print(f"\nBook Details:")
             print(f"Title: {title}")
             print(f"Author: {authors}")
             print(f"Category: {categories}")
             print(f"Mature Rating: {maturityRating}")
             print(f"Description: {description}")
+            print(f"isbn: {isbn}")
 
     # Display the image with text boxes
     display_image(image_with_boxes)
