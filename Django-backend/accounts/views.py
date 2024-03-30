@@ -61,7 +61,9 @@ def login_view(request):
 
 #User logout
 def logout_view(request):
+    print("Logging out", request.user)
     logout(request)
+    print("Logged out.")
     return JsonResponse({'message': 'Logout successful'})
 
 
