@@ -47,10 +47,26 @@ INSTALLED_APPS = [
     
 ]
 
+# For sessions, use cookies
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
+
 # For user accounts
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+# This might fix the cookie based sessions
+CORS_ALLOW_CREDENTIALS = True
+
+#maybe this will fix sessions
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES':[
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES':[
+        'rest_framework.permissions.IsAuthenticated'
+    ]
+}
 
 
 CORS_ALLOWED_ORIGINS = [
