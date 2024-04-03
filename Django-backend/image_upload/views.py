@@ -122,6 +122,7 @@ def save_book(request):
 
             # Retrieve current user's username
             username = request.user.username
+            print(request.user.is_authenticated)
 
             # Check for missing data and handle appropriately
             if not title or not authors or not categories:
