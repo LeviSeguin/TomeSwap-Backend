@@ -1,6 +1,0 @@
-{
-    "api": {
-        "name": "book-recommender-api",
-        "url": "http://localhost:8000"
-    }
-}
