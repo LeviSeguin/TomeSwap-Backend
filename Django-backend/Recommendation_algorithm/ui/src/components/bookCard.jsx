@@ -6,6 +6,7 @@ export default function BookCard({book}) {
       </div>
       <h1 className="font-semibold text-center">{book.book_name}</h1>
       <h3 className="text-sm text-center">{book.book_author}</h3>
-    </div>
+      </div>
   )
 }
+ 
