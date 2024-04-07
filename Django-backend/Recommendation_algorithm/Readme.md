@@ -22,10 +22,7 @@ API docs will be available at :
 - [http://localhost:8000/redoc](http://localhost:8000/redoc)
 
 ### To start the development server:
-```
-    cd ui
-```
-then
+open ui in terminal and run 
 ```
     npm run dev
 ```
@@ -33,8 +30,5 @@ then
 ```
     npm run build 
 ```
-The output directory will be : [/public](public)
-
 ## Other important stuff
-- To change backend port in development or production use [/config](config).
 - [Dataset](data) taken from [kaggle](https://www.kaggle.com/datasets/arashnic/book-recommendation-dataset).
