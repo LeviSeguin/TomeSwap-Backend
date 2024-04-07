@@ -58,13 +58,12 @@ CORS_ALLOW_ALL_ORIGINS = True
 # This might fix the cookie based sessions
 CORS_ALLOW_CREDENTIALS = True
 
-#maybe this will fix sessions
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES':[
         'rest_framework.authentication.SessionAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES':[
-        'rest_framework.permissions.IsAuthenticated'
+        'rest_framework.permissions.AllowAny'
     ]
 }
 
