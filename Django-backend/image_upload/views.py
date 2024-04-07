@@ -109,6 +109,7 @@ def upload_image(request):
 from django.http import JsonResponse
 import json
 
+@login_required
 def save_book(request):
     if request.method == 'POST':
         try:
