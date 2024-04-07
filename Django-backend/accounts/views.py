@@ -1,6 +1,7 @@
 import json
 from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
+from django.http import HttpResponse #for sessions
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -18,6 +19,11 @@ def register_user(request):
 
 # User login
 def login_view(request):
+    # Debug
+    print("session key in request: ", request.session.session_key)
+    print("user.is_authenticated before login?: ", request.user.is_authenticated)
+
+    # Get username and password from request
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
@@ -26,10 +32,15 @@ def login_view(request):
         except json.JSONDecodeError:
             return JsonResponse({'error': 'Invalid JSON data'}, status=400)
         
+        # See if user is in the database
         user = authenticate(request, username=username, password=password)
 
+        #login user if in the database
         if user is not None:
             login(request, user)
+            #debug 
+            #print(request.session.session_key)
+            #print("user.is_authenticated after login: ", request.user.is_authenticated)
             response_data = {'message': 'Login successful'}
             if request.user.is_authenticated:
                 # Retrieve the logged-in user's username
@@ -39,10 +50,7 @@ def login_view(request):
                 response_data['user authenticated '] = username
             else:
                 print("User is not authenticated")
-            if 'session_key' in request.session:
-                print("Session key:", request.session.session_key)
-            else:
-                print("No session key found.")
+
                 
             return JsonResponse(response_data)
         else:
@@ -53,7 +61,9 @@ def login_view(request):
 
 #User logout
 def logout_view(request):
+    print("Logging out", request.user)
     logout(request)
+    print("Logged out.")
     return JsonResponse({'message': 'Logout successful'})
 
 
