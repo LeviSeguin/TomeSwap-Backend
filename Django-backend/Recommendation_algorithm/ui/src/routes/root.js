@@ -1,10 +1,10 @@
 import { createContext, useState, useEffect } from "react";
 import { Outlet, NavLink, useLocation } from "react-router-dom";
 
-import Search from "../components/search";
-import BookCard from "../components/bookCard";
-import popularBooks from "../utilities/popularBooks"
-
+import Search from "../components/search.js";
+import BookCard from "../components/bookCard.js";
+import popularBooks from "../utilities/popularBooks.js"
+import Header from "../../../../../../TomeSwap-Frontend/react-frontend/src/components/Header.js";
 export const AppContext = createContext();
 
 export default function Root() {
@@ -27,7 +27,7 @@ export default function Root() {
       bookData: [bookData, setBookData]
     }}>
       <div className='flex h-screen'>
-
+       <Header />
         {/* Left sidebar */}
         <div className='w-1/5 h-full bg-slate-100'>
           <div className="h-1/6 p-2">

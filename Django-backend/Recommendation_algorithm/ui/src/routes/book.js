@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import recommendBoooks from '../utilities/fetchRecommendations'
-import BookCard from '../components/bookCard'
+import recommendBoooks from '../utilities/fetchRecommendations.js'
+import BookCard from '../components/bookCard.js'
 
 export default function Book() {
   const [recommendedBooksData, setRecommendedBooksData] = useState([])

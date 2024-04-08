@@ -1,8 +1,8 @@
 import { useContext, useState } from 'react'
 
-import { AppContext } from '../routes/root'
-import fetchBooks from "../utilities/fetchBooks"
-import Loader from "./loader"
+import { AppContext } from '../routes/root.js'
+import fetchBooks from "../utilities/fetchBooks.js"
+import Loader from "./loader.js"
 
 export default function Search(props) {
     const [searchText, setSearchText] = useContext(AppContext).search

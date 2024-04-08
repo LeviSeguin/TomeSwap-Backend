@@ -7,9 +7,9 @@ import {
 
 import './index.css'
 
-import Root from './routes/root.jsx'
-import ErrorPage from "./error-page";
-import Book from "./routes/book";
+import Root from './routes/root.js'
+import ErrorPage from "./error-page.js";
+import Book from "./routes/book.js";
 
 const router = createBrowserRouter([
   {
@@ -26,7 +26,7 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>,
+      <React.StrictMode>
+        <RouterProvider router={router} />
+      </React.StrictMode>,
 )
