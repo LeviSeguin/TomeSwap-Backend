@@ -1,4 +1,3 @@
-#Recommendation_algorithm/src/collaborative_recommender.py
 import pickle
 import numpy as np
 

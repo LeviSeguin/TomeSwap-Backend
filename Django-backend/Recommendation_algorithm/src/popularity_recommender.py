@@ -1,4 +1,3 @@
-#Recommendation_algorithm/src/popularity_recommender.py
 import pickle
 
 popularity_df = pickle.load(open("models/popular.pkl", "rb"))
